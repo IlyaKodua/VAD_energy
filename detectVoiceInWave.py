@@ -1,10 +1,4 @@
 from vad import VoiceActivityDetector
-import argparse
-import json
-import numpy as np
-import librosa
-import librosa.display
-from matplotlib import pyplot as plt
 import glob
 import os
 
