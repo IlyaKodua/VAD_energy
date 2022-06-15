@@ -1,4 +1,4 @@
-from vad import VoiceActivityDetector
+from vad import VAD
 import glob
 import os
 
@@ -10,7 +10,7 @@ if __name__ == "__main__":
     os.mkdir("pics")
     list_files = glob.glob('/home/liya/study/mb/wavs_my' + '**/*.WAV', recursive=True)
     for f in list_files:
-        v = VoiceActivityDetector(f)
+        v = VAD(f)
         v.detect_speech()
         name = f.split("/")[-1].split(".")[0]
         v.plot_wav_and_prob(dir + "/" + name)
