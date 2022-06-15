@@ -9,10 +9,9 @@ class VoiceActivityDetector():
         self._read_wav(wave_input_filename)._convert_to_mono()
         self.sample_window = 0.02 #20 ms
         self.sample_overlap = 0.01 #10ms
-        self.speech_window = 0.5 #half a second
         self.speech_start_band = 200
         self.speech_end_band = 500
-        self.threshold = 0.794
+        # self.threshold = 0.794
         self.timestamps = []
         self.speech_prob = []
         self.filename = wave_input_filename.split("/")[-1]
@@ -77,11 +76,6 @@ class VoiceActivityDetector():
       
        
     def detect_speech(self):
-        """ Detects speech regions based on ratio between speech band energy
-        and total energy.
-        Output is array of window numbers and speech flags (1 - speech, 0 - nonspeech).
-        """
-        detected_windows = np.array([])
         sample_window = int(self.rate * self.sample_window)
         sample_overlap = int(self.rate * self.sample_overlap)
         data = self.data
@@ -115,7 +109,7 @@ class VoiceActivityDetector():
         plt.plot(self.timestamps, self.speech_prob, 'r', label = "speech probobility")
         plt.xlabel('time, s')
         plt.title(self.filename + ", max probability: " + max_prob)
-        leg = plt.legend(loc='lower center')
+        plt.legend(loc='lower center')
         plt.savefig(path_to_save)
         plt.show()
         pass
