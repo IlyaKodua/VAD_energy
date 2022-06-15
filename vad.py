@@ -66,10 +66,11 @@ class VoiceActivityDetector():
     
     def _max_filter(self, speech_prob, win_size = 10):
         smooth_prob = np.zeros_like(speech_prob)
-        smooth_prob[0:win_size] = np.max(speech_prob[0:win_size])
-        smooth_prob[-win_size:-1] = np.max(speech_prob[-win_size:-1])
-        for i in range(win_size,len(smooth_prob) - win_size):
-            smooth_prob[i:i+win_size] = np.max(speech_prob[i:i+win_size])
+        half = int(win_size/2)
+        smooth_prob[0:half + 1] = np.max(speech_prob[0:half + 1])
+        smooth_prob[-half - 1:-1] = np.max(speech_prob[-half - 1:-1])
+        for i in range(half + 1,len(smooth_prob) - half - 1):
+            smooth_prob[i - half:i+half + 1] = np.max(speech_prob[i - half :i+half + 1])
             
         return smooth_prob
 
@@ -98,7 +99,7 @@ class VoiceActivityDetector():
             sample_start += sample_overlap
 
         self.timestamps = timstamps
-        self.speech_prob = self._max_filter(speech_prob, win_size=100)
+        self.speech_prob = self._max_filter(speech_prob, win_size=101)
         pass
     
     def plot_wav_and_prob(self, path_to_save):
