@@ -85,7 +85,7 @@ class VAD():
             sum_full_energy = sum(energy_freq.values())
             speech_ratio = sum_voice_energy/sum_full_energy
             speech_prob.append(speech_ratio)
-            timstamps.append(self.rate * (sample_start + sample_end)/2)
+            timstamps.append( (sample_start + sample_end)/2 / self.rate)
             sample_start += hop
 
         self.timestamps = timstamps
@@ -94,7 +94,7 @@ class VAD():
     
     def plot_wav_and_prob(self, path_to_save):
 
-        plt.plot(self.rate * np.arange(len(self.data)), self.data/np.max(self.data), 'b', label="signal")
+        plt.plot(np.arange(len(self.data))/self.rate, self.data/np.max(self.data), 'b', label="signal")
         max_prob = str(np.max(self.speech_prob))
         max_prob = max_prob[0:5]
         plt.plot(self.timestamps, self.speech_prob, 'r', label = "speech probobility")

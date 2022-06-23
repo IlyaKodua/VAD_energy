@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # path_to_save
     dir = "pics"
     os.mkdir("pics")
-    list_files = glob.glob('/home/liya/study/mb/wavs_my' + '**/*.WAV', recursive=True)
+    list_files = glob.glob('/home/liya/study/mb/dataset' + '**/*.WAV', recursive=True)
     for f in list_files:
         v = VAD(f)
         v.detect_speech()
