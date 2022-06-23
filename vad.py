@@ -1,6 +1,8 @@
 import numpy as np
 import scipy.io.wavfile as wf
 import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
+from scipy.io.wavfile import write
 
 class VAD():
     
@@ -104,4 +106,9 @@ class VAD():
         plt.savefig(path_to_save)
         plt.show()
         pass
+
+    def save_wav(self, path_to_save):
+        f2 = interp1d(self.timestamps, self.speech_prob, kind='cubic', fill_value="extrapolate")
+        wav = 10000*f2(np.arange(len(self.data))/self.rate)
+        write(path_to_save, self.rate, wav.astype(np.int16))
  
