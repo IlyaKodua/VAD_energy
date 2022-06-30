@@ -23,7 +23,7 @@ class VAD():
         self.filename = wave_file
         pass
 
-    def sigmoid_by_thres(self,x, thres = 0.7855, dx = 0.791 - 0.78):
+    def sigmoid_by_thres(self,x, thres = 0.7855, dx = 0.791 - 0.7855):
         return 1 / (1 + np.exp(-(x - thres)/dx))
     
     
