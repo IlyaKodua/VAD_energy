@@ -22,6 +22,9 @@ class VAD():
         self.channels = len(self.data.shape)
         self.filename = wave_file
         pass
+
+    def sigmoid_by_thres(self,x, thres = 0.7855, dx = 0.791 - 0.78):
+        return 1 / (1 + np.exp(-(x - thres)/dx))
     
     
     def GetFreq(self, audio_data):
@@ -91,13 +94,17 @@ class VAD():
             sample_start += hop
 
         self.timestamps = timstamps
-        self.speech_prob = self.max_filter(speech_prob, win_size=101)
+        self.speech_prob = self.sigmoid_by_thres(self.max_filter(speech_prob, win_size=101))
         pass
     
     def plot_wav_and_prob(self, path_to_save):
 
         plt.plot(np.arange(len(self.data))/self.rate, self.data/np.max(self.data), 'b', label="signal")
-        max_prob = str(np.max(self.speech_prob))
+        max_prob = np.max(self.speech_prob)
+        if  max_prob < 1e-3:
+            max_prob = "0.000000"
+        else:
+            max_prob = str(max_prob)
         max_prob = max_prob[0:5]
         plt.plot(self.timestamps, self.speech_prob, 'r', label = "speech probobility")
         plt.xlabel('time, s')
@@ -110,5 +117,6 @@ class VAD():
     def save_wav(self, path_to_save):
         f2 = interp1d(self.timestamps, self.speech_prob, kind='cubic', fill_value="extrapolate")
         wav = 10000*f2(np.arange(len(self.data))/self.rate)
+        wav[wav < 0] = np.median(wav)
         write(path_to_save, self.rate, wav.astype(np.int16))
  
